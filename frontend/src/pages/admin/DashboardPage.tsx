@@ -1,13 +1,14 @@
+import type { ElementType, ReactNode } from "react";
 import {
-  AlertCircle,
   ArrowUpRight,
   CheckCircle2,
-  Eye,
   FolderPlus,
-  MoreHorizontal,
   Package,
+  Pencil,
   Plus,
   Tags,
+  Trash2,
+  ChartLine,
 } from "lucide-react";
 
 type StatItem = {
@@ -15,7 +16,7 @@ type StatItem = {
   value: string;
   description: string;
   badge: string;
-  icon: React.ElementType;
+  icon: ElementType;
 };
 
 type CategoryItem = {
@@ -28,10 +29,10 @@ type ProductItem = {
   name: string;
   category: string;
   price: string;
+  stock: number;
   status: "Active" | "Draft";
   createdDate: string;
 };
-
 
 const stats: StatItem[] = [
   {
@@ -54,13 +55,6 @@ const stats: StatItem[] = [
     description: "Product sedang tampil",
     badge: "92%",
     icon: CheckCircle2,
-  },
-  {
-    label: "Product Without Category",
-    value: "3",
-    description: "Butuh dilengkapi category",
-    badge: "Check",
-    icon: AlertCircle,
   },
 ];
 
@@ -89,36 +83,38 @@ const categories: CategoryItem[] = [
 
 const latestProducts: ProductItem[] = [
   {
-    name: "Biji ketapang",
-    category: "Makanan Ringan",
+    name: "Glow Serum",
+    category: "Skincare",
     price: "Rp 120.000",
+    stock: 20,
     status: "Active",
     createdDate: "24 Jun 2026",
   },
   {
-    name: "Kripik Malay",
-    category: "Makanan Ringan",
+    name: "Matte Lip Cream",
+    category: "Makeup",
     price: "Rp 89.000",
+    stock: 18,
     status: "Active",
     createdDate: "23 Jun 2026",
   },
   {
-    name: "Kripik Bawang",
-    category: "Makanan Ringan",
+    name: "Hair Vitamin",
+    category: "Haircare",
     price: "Rp 65.000",
+    stock: 12,
     status: "Draft",
     createdDate: "22 Jun 2026",
   },
   {
-    name: "Gabus Keju",
-    category: "Makanan Ringan",
+    name: "Body Lotion",
+    category: "Bodycare",
     price: "Rp 95.000",
+    stock: 9,
     status: "Active",
     createdDate: "21 Jun 2026",
   },
 ];
-
-
 
 export default function DashboardPage() {
   return (
@@ -154,7 +150,7 @@ export default function DashboardPage() {
         </div>
 
         {/* Summary Cards */}
-        <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
           {stats.map((item) => (
             <StatCard key={item.label} item={item} />
           ))}
@@ -210,10 +206,13 @@ function ProductByCategory() {
             Ringkasan jumlah product berdasarkan category.
           </p>
         </div>
-
-        <button className="inline-flex min-h-10 items-center justify-center gap-2 rounded-xl border border-[#F2F2F2] bg-[#F8F9FE] px-4 text-sm font-semibold text-[#0B1F33] transition hover:bg-[#F2F2F2]">
-          View Detail
-          <ArrowUpRight size={16} />
+        <button
+        type="button"
+        aria-label="View category chart"
+        title="View category chart"
+        className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-[#F2F2F2] bg-[#F8F9FE] text-[#B268A7] transition hover:border-[#B268A7]/30 hover:bg-[#B268A7]/10"
+        >
+        <ChartLine size={18} />
         </button>
       </div>
 
@@ -255,10 +254,10 @@ function CategoryProgress({ item }: { item: CategoryItem }) {
 function LatestProducts() {
   return (
     <div className="rounded-2xl border border-[#F2F2F2] bg-white p-5 shadow-[0_14px_40px_rgba(11,31,51,0.04)] lg:p-6">
-      <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+      <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
         <div>
           <h2 className="text-xl font-bold text-[#0B1F33]">Product Terbaru</h2>
-          <p className="mt-1 text-sm text-[#6C7095]">
+          <p className="mt-1 text-sm leading-relaxed text-[#6C7095]">
             Daftar product terbaru yang masuk ke dashboard.
           </p>
         </div>
@@ -272,55 +271,73 @@ function LatestProducts() {
       {/* Desktop Table */}
       <div className="hidden overflow-hidden rounded-2xl border border-[#F2F2F2] md:block">
         <table className="w-full border-collapse text-left">
-          <thead className="bg-[#F8F9FE]">
-            <tr>
+          <thead>
+            <tr className="bg-[#F8F9FE]">
               <TableHead>Product Name</TableHead>
               <TableHead>Category</TableHead>
               <TableHead>Price</TableHead>
+              <TableHead>Stock</TableHead>
               <TableHead>Status</TableHead>
               <TableHead>Created Date</TableHead>
-              <TableHead align="right">Action</TableHead>
+              <TableHead align="center">Action</TableHead>
             </tr>
           </thead>
 
           <tbody className="divide-y divide-[#F2F2F2]">
             {latestProducts.map((product) => (
-              <tr key={product.name} className="transition hover:bg-[#F8F9FE]">
+              <tr
+                key={product.name}
+                className="bg-white transition hover:bg-[#F8F9FE]"
+              >
                 <td className="px-4 py-4">
                   <div className="flex items-center gap-3">
-                    <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#F8F9FE] text-[#0B1F33]">
+                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#F8F9FE] text-[#0B1F33]">
                       <Package size={18} />
                     </div>
 
-                    <div>
-                      <p className="font-semibold text-[#0B1F33]">
+                    <div className="min-w-0">
+                      <p className="truncate text-sm font-bold text-[#0B1F33]">
                         {product.name}
                       </p>
-                      <p className="text-xs text-[#6C7095]">Product item</p>
+                      <p className="mt-1 text-xs text-[#6C7095]">
+                        Product item
+                      </p>
                     </div>
                   </div>
                 </td>
 
-                <td className="px-4 py-4 text-sm font-medium text-[#6C7095]">
-                  {product.category}
+                <td className="px-4 py-4">
+                  <span className="rounded-full bg-[#F8F9FE] px-3 py-1 text-xs font-semibold text-[#6C7095]">
+                    {product.category}
+                  </span>
                 </td>
 
-                <td className="px-4 py-4 text-sm font-semibold text-[#0B1F33]">
+                <td className="px-4 py-4 text-sm font-bold text-[#0B1F33]">
                   {product.price}
+                </td>
+
+                <td className="px-4 py-4 text-sm font-semibold text-[#6C7095]">
+                  {product.stock}
                 </td>
 
                 <td className="px-4 py-4">
                   <StatusBadge status={product.status} />
                 </td>
 
-                <td className="px-4 py-4 text-sm font-medium text-[#6C7095]">
+                <td className="px-4 py-4 text-sm font-semibold text-[#6C7095]">
                   {product.createdDate}
                 </td>
 
-                <td className="px-4 py-4 text-right">
-                  <button className="inline-flex h-9 w-9 items-center justify-center rounded-xl bg-[#F8F9FE] text-[#6C7095] transition hover:bg-[#F2F2F2] hover:text-[#0B1F33]">
-                    <MoreHorizontal size={18} />
-                  </button>
+                <td className="px-4 py-4">
+                  <div className="flex items-center justify-center gap-2">
+                    <button className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#B268A7]/10 text-[#B268A7] transition hover:bg-[#B268A7] hover:text-white">
+                      <Pencil size={16} />
+                    </button>
+
+                    <button className="flex h-9 w-9 items-center justify-center rounded-xl bg-red-50 text-red-500 transition hover:bg-red-500 hover:text-white">
+                      <Trash2 size={16} />
+                    </button>
+                  </div>
                 </td>
               </tr>
             ))}
@@ -337,12 +354,12 @@ function LatestProducts() {
           >
             <div className="flex items-start justify-between gap-3">
               <div className="flex min-w-0 items-center gap-3">
-                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white text-[#0B1F33]">
+                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-white text-[#0B1F33]">
                   <Package size={18} />
                 </div>
 
                 <div className="min-w-0">
-                  <p className="truncate font-semibold text-[#0B1F33]">
+                  <p className="truncate text-sm font-bold text-[#0B1F33]">
                     {product.name}
                   </p>
                   <p className="mt-1 text-xs text-[#6C7095]">
@@ -356,24 +373,40 @@ function LatestProducts() {
 
             <div className="mt-4 grid grid-cols-2 gap-3 rounded-xl bg-white p-3">
               <div>
-                <p className="text-xs text-[#6C7095]">Price</p>
-                <p className="mt-1 text-sm font-semibold text-[#0B1F33]">
+                <p className="text-xs font-medium text-[#6C7095]">Price</p>
+                <p className="mt-1 text-sm font-bold text-[#0B1F33]">
                   {product.price}
                 </p>
               </div>
 
               <div>
-                <p className="text-xs text-[#6C7095]">Created</p>
-                <p className="mt-1 text-sm font-semibold text-[#0B1F33]">
+                <p className="text-xs font-medium text-[#6C7095]">Stock</p>
+                <p className="mt-1 text-sm font-bold text-[#0B1F33]">
+                  {product.stock}
+                </p>
+              </div>
+
+              <div className="col-span-2">
+                <p className="text-xs font-medium text-[#6C7095]">
+                  Created Date
+                </p>
+                <p className="mt-1 text-sm font-bold text-[#0B1F33]">
                   {product.createdDate}
                 </p>
               </div>
             </div>
 
-            <button className="mt-3 inline-flex min-h-10 w-full items-center justify-center gap-2 rounded-xl bg-white text-sm font-semibold text-[#0B1F33] transition hover:bg-[#F2F2F2]">
-              <Eye size={16} />
-              View Product
-            </button>
+            <div className="mt-3 grid grid-cols-2 gap-2">
+              <button className="inline-flex min-h-10 items-center justify-center gap-2 rounded-xl bg-[#B268A7]/10 text-sm font-semibold text-[#B268A7] transition hover:bg-[#B268A7] hover:text-white">
+                <Pencil size={16} />
+                Edit
+              </button>
+
+              <button className="inline-flex min-h-10 items-center justify-center gap-2 rounded-xl bg-red-50 text-sm font-semibold text-red-500 transition hover:bg-red-500 hover:text-white">
+                <Trash2 size={16} />
+                Delete
+              </button>
+            </div>
           </div>
         ))}
       </div>
@@ -385,13 +418,17 @@ function TableHead({
   children,
   align = "left",
 }: {
-  children: React.ReactNode;
-  align?: "left" | "right";
+  children: ReactNode;
+  align?: "left" | "center" | "right";
 }) {
   return (
     <th
-      className={`px-4 py-3 text-xs font-semibold uppercase tracking-[0.12em] text-[#6C7095] ${
-        align === "right" ? "text-right" : "text-left"
+      className={`px-4 py-4 text-xs font-bold uppercase tracking-[0.22em] text-[#6C7095] ${
+        align === "right"
+          ? "text-right"
+          : align === "center"
+          ? "text-center"
+          : "text-left"
       }`}
     >
       {children}
@@ -414,4 +451,3 @@ function StatusBadge({ status }: { status: ProductItem["status"] }) {
     </span>
   );
 }
-
