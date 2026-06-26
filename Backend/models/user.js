@@ -14,6 +14,12 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   User.init({
+    idUser: {
+        allowNull: false,
+        autoIncrement: true,
+        primaryKey: true,
+        type: DataTypes.INTEGER
+    },
     nama: {
       type: DataTypes.STRING,
       allowNull: false,
@@ -43,8 +49,9 @@ module.exports = (sequelize, DataTypes) => {
      },
     },
     statusUser: {
-      type: DataTypes.ENUM,
+      type: DataTypes.ENUM('Active', 'Inactive'),
       allowNull: false,
+      defaultValue: 'Active'
     }
   }, {
     sequelize,
