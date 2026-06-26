@@ -56,14 +56,9 @@ module.exports = (sequelize, DataTypes) => {
      },
     },
     statusProduk: {
-      type: DataTypes.ENUM,
+      type: DataTypes.ENUM('Active', 'Inactive'),
       allowNull: false,
     },
-    imgProduk: DataTypes.STRING,
-    descProduk: DataTypes.TEXT,
-    harga: DataTypes.INTEGER,
-    stok: DataTypes.INTEGER,
-    statusProduk: DataTypes.ENUM
   }, {
     sequelize,
     modelName: 'Product',

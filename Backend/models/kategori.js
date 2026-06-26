@@ -11,7 +11,7 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       user.associate = function(models) {
-        user.hasMany(models.Transaction, {
+        user.hasMany(models.Product, {
           foreignKey: 'idKategori'
         });
       };
@@ -27,7 +27,7 @@ module.exports = (sequelize, DataTypes) => {
      },
     },
     statusKategori: {
-     type: DataTypes.ENUM,
+      type: DataTypes.ENUM('Active', 'Inactive'),
       allowNull: false,
      },
   }, {
