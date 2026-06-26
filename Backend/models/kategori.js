@@ -19,9 +19,16 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   Kategori.init({
+    idKategori: {
+        allowNull: false,
+        autoIncrement: true,
+        primaryKey: true,
+        type: DataTypes.INTEGER
+    },
     namaKategori: {
       type: DataTypes.STRING,
       allowNull: false,
+      unique : {msg : 'Nama kategori sudah ada'},
       validate: {
        notNull: { msg: 'Nama Kategori harus diisi' },
        notEmpty: { msg: 'Nama Kategori harus diisi' },
@@ -30,6 +37,7 @@ module.exports = (sequelize, DataTypes) => {
     statusKategori: {
       type: DataTypes.ENUM('Active', 'Inactive'),
       allowNull: false,
+      defaultValue: 'Active'
      },
   }, {
     sequelize,
