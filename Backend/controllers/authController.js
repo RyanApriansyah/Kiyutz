@@ -35,13 +35,3 @@ exports.login = async (req, res) => {
         console.log(error)
     }
 }
-
-exports.test = async (req, res) => {
-    try {
-        const data = await User.findAll()
-
-        res.send(data)
-    } catch (error) {
-        console.log(error)
-    }
-}
