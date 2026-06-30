@@ -15,6 +15,16 @@ module.exports = (sequelize, DataTypes) => {
   }
   
   Product.init({ 
+    idProduct: {
+        allowNull: false,
+        autoIncrement: true,
+        primaryKey: true,
+        type: DataTypes.INTEGER,
+      },
+    idKategori: {
+      allowNull: false,
+      type: DataTypes.INTEGER
+    },
     namaProduk: {
       type: DataTypes.STRING,
       allowNull: false,
@@ -32,7 +42,7 @@ module.exports = (sequelize, DataTypes) => {
      },
     },
     descProduk: {
-      type: DataTypes.STRING,
+      type: DataTypes.TEXT,
       allowNull: false,
       validate: {
        notNull: { msg: 'Deskripsi Produk harus diisi' },
@@ -40,7 +50,7 @@ module.exports = (sequelize, DataTypes) => {
      },
     },
     harga: {
-      type: DataTypes.STRING,
+      type: DataTypes.INTEGER,
       allowNull: false,
       validate: {
        notNull: { msg: 'Harga Produk harus diisi' },
@@ -48,7 +58,7 @@ module.exports = (sequelize, DataTypes) => {
      },
     },
     stok: {
-      type: DataTypes.STRING,
+      type: DataTypes.INTEGER,
       allowNull: false,
       validate: {
        notNull: { msg: 'Stok Produk harus diisi' },
@@ -58,6 +68,7 @@ module.exports = (sequelize, DataTypes) => {
     statusProduk: {
       type: DataTypes.ENUM('Active', 'Inactive'),
       allowNull: false,
+      defaultValue: 'Active'
     },
   }, {
     sequelize,
